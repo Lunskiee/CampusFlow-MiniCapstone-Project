@@ -15,15 +15,21 @@ $cream: #fdf6ee;
 
 .form-side {
   flex: 1;
-  padding: 50px 80px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
+  justify-content: center; 
+  align-items: center;     
+  position: relative;      
+  box-sizing: border-box;
 
   .brand {
+    position: absolute;   
+    top: 40px;
+    left: 80px;
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 40px;
 
     img {
       width: 65px;
@@ -45,11 +51,12 @@ $cream: #fdf6ee;
   .form-container {
     width: 100%;
     max-width: 420px;
+    margin-top: -30px; 
     
     .title {
       color: $maroon;
       font-size: 2.5rem;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       font-weight: bold;
       .highlight { color: $gold; }
     }
@@ -57,7 +64,7 @@ $cream: #fdf6ee;
 }
 
 .input-field {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   
   input {
     width: 100%;

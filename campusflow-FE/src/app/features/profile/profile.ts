@@ -37,25 +37,25 @@ export class ProfileComponent implements OnInit {
 
   constructor(public router: Router) {}
   
-ngOnInit() {
-  const savedUser = localStorage.getItem('currentUser');
-  if (savedUser) {
-    try {
-      this.user = JSON.parse(savedUser);
-      const email = this.user.email?.toLowerCase() || '';
-      const isAdminDomain = email.endsWith('@admin.com') || email.endsWith('@admin.liceo.edu.ph');
+  ngOnInit() {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        this.user = JSON.parse(savedUser);
+        const email = this.user.email?.toLowerCase() || '';
+        const isAdminDomain = email.endsWith('@admin.com') || email.endsWith('@admin.liceo.edu.ph');
 
-      this.currentUserRole = this.user.role || (isAdminDomain ? 'admin' : 'user');
-    } catch (e) {
-      this.user = {};
-      this.currentUserRole = 'user';
+        this.currentUserRole = this.user.role || (isAdminDomain ? 'admin' : 'user');
+      } catch (e) {
+        this.user = {};
+        this.currentUserRole = 'user';
+      }
+      this.generatePasswordHint();
+      this.updateInitials();
+    } else {
+      this.router.navigate(['/login']);
     }
-    this.generatePasswordHint();
-    this.updateInitials();
-  } else {
-    this.router.navigate(['/login']);
   }
-}
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -83,7 +83,14 @@ ngOnInit() {
   }
 
   verifyOTP() {
-    if (this.otpInput === this.generatedOtp || this.otpInput === '1234') {
+    // 1. Check if an OTP was actually sent first
+    if (!this.otpSent || !this.generatedOtp) {
+      alert('Please request an OTP first.');
+      return;
+    }
+
+    // 2. Strict comparison with trim() to remove unintended whitespace
+    if (this.otpInput && this.otpInput.trim() === this.generatedOtp) {
       this.isVerified = true;
       this.isChangingPassword = true;
       alert('Identity verified successfully!');
@@ -109,7 +116,6 @@ ngOnInit() {
     this.updateInitials();
     localStorage.setItem('currentUser', JSON.stringify(this.user));
 
-    // Keep registeredUsers array synced with personal info updates
     const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     const idx = registeredUsers.findIndex((u: any) => u.email.toLowerCase() === this.user.email.toLowerCase());
     if (idx !== -1) {
@@ -148,7 +154,6 @@ ngOnInit() {
       return;
     }
 
-    // Update password locally in currentUser & registeredUsers
     this.user.password = this.passwordData.new;
     localStorage.setItem('currentUser', JSON.stringify(this.user));
 
