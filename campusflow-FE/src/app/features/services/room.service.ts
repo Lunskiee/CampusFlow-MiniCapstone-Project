@@ -6,7 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class RoomService {
-  private recommendUrl = 'http://localhost:5000/api/recommendation';
+  private recommendUrl = 'http://localhost:5000/api/recommend-room';
   private bookingsUrl = 'http://localhost:5000/api/bookings';
 
   private bookingsSubject = new BehaviorSubject<any[]>([]);

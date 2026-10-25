@@ -17,8 +17,6 @@ if (process.env.MONGO_URI) {
     mongoose.connect(process.env.MONGO_URI)
         .then(() => console.log('Connected to MongoDB database'))
         .catch((err) => console.error('MongoDB connection error:', err));
-} else {
-    app.use('/api', bookingRoutes);
 }
 
 // API Routes

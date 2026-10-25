@@ -2,6 +2,7 @@ const { google } = require('googleapis');
 const path = require('path');
 
 const credentialsPath = process.env.GOOGLE_SERVICE_ACCOUNT_PATH || path.join(__dirname, '../config/service-account-key.json');
+const googleCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
 
 const auth = new google.auth.GoogleAuth({
   keyFile: credentialsPath,
@@ -50,7 +51,7 @@ async function createCalendarEvent(bookingData) {
     };
 
     const response = await calendar.events.insert({
-      calendarId: 'primary',
+      calendarId: googleCalendarId,
       resource: event,
       sendUpdates: 'all',
     });
@@ -67,14 +68,19 @@ async function createCalendarEvent(bookingData) {
  * Deletes a Google Calendar event when a booking is canceled.
  */
 async function deleteCalendarEvent(googleEventId) {
+  if (!googleEventId || typeof googleEventId !== 'string') {
+    return;
+  }
+
   try {
     await calendar.events.delete({
-      calendarId: 'primary',
+      calendarId: googleCalendarId,
       eventId: googleEventId,
     });
     console.log(`Google Calendar Event ${googleEventId} deleted.`);
   } catch (error) {
     console.error('Error deleting Google Calendar event:', error);
+    throw error;
   }
 }
 

@@ -60,8 +60,16 @@
       <button (click)="changeDate(1)">Next</button>
     </div>
 
-    <!-- Building Tabs and Floor Dropdown Bar -->
-    <div class="tabs-and-floors-bar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+    <div class="gemini-notice-overlay" *ngIf="geminiModalVisible" (click)="closeGeminiMessage()">
+      <div class="gemini-notice" (click)="$event.stopPropagation()">
+        <div class="gemini-notice-title">localhost:4200 says</div>
+        <div class="gemini-notice-message">{{ geminiModalMessage }}</div>
+        <button type="button" class="gemini-ok-btn" (click)="closeGeminiMessage()">OK</button>
+      </div>
+    </div>
+
+    <!-- Building Tabs, Floor Dropdown Bar, and Gemini AI Recommendation Button -->
+    <div class="tabs-and-floors-bar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
       
       <div class="tabs">
         <button *ngFor="let b of buildings" 
@@ -72,16 +80,24 @@
         </button>
       </div>
 
-      <!-- Floor Selector Dropdown -->
-      <div class="floor-selector" style="display: flex; align-items: center; gap: 8px;">
-        <label for="floorSelect" style="font-weight: bold; font-size: 0.9rem;">Floor:</label>
-        <select id="floorSelect" 
-                [(ngModel)]="selectedFloor" 
-                style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; background-color: #fff; font-weight: bold; cursor: pointer;">
-          <option *ngFor="let f of floors" [value]="f">
-            Floor {{ f }}
-          </option>
-        </select>
+      <!-- Right side controls: Floor Selector & Gemini AI Button -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <!-- Gemini AI Smart Recommendation Button -->
+        <button type="button" class="btn-gemini-ai" (click)="getSmartRoomRecommendation()" style="background: #4a0000; color: white; padding: 7px 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; gap: 5px;">
+          ✨ Ask Gemini AI
+        </button>
+
+        <!-- Floor Selector Dropdown -->
+        <div class="floor-selector" style="display: flex; align-items: center; gap: 8px;">
+          <label for="floorSelect" style="font-weight: bold; font-size: 0.9rem;">Floor:</label>
+          <select id="floorSelect" 
+                  [(ngModel)]="selectedFloor" 
+                  style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; background-color: #fff; font-weight: bold; cursor: pointer;">
+            <option *ngFor="let f of floors" [value]="f">
+              Floor {{ f }}
+            </option>
+          </select>
+        </div>
       </div>
 
     </div>
@@ -173,7 +189,7 @@
 
       <div class="action-row">
         <button class="btn-google-calendar" type="button" (click)="exportToGoogleCalendar(selectedBooking)">
-          Add to Google Calendar
+          📅 Add to Google Calendar
         </button>
       </div>
 

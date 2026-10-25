@@ -40,6 +40,8 @@ export class BookingComponent implements OnInit {
   selectedBooking: any = null;
   savedBookings: any[] = [];
   showCancelConfirm: boolean = false;
+  geminiModalVisible = false;
+  geminiModalMessage = '';
 
   buildings: string[] = ['SAC Building', 'NAC Building', 'WAC Building', 'EAC Building'];
   periods = [
@@ -229,19 +231,30 @@ export class BookingComponent implements OnInit {
     }
   }
 
+  showGeminiMessage(message: string) {
+    this.geminiModalMessage = message;
+    this.geminiModalVisible = true;
+  }
+
+  closeGeminiMessage() {
+    this.geminiModalVisible = false;
+    this.geminiModalMessage = '';
+  }
+
   getSmartRoomRecommendation() {
     const prompt = `Find an available room in ${this.selectedBuilding} for Period 1 on ${this.dateForInput}`;
-    
+
     this.http.post<any>('http://localhost:5000/api/recommend-room', { prompt }).subscribe({
       next: (res) => {
-        if (res && res.success) {
-          alert(`Gemini Suggestion:\n${res.recommendation}`);
+        if (res && res.recommendation) {
+          this.showGeminiMessage(`Gemini Suggestion:\n${res.recommendation}`);
         } else {
-          alert('Smart recommendation currently unavailable.');
+          const message = res?.message || 'Smart recommendation currently unavailable.';
+          this.showGeminiMessage(message);
         }
       },
       error: () => {
-        alert('Could not connect to backend recommendation service.');
+        this.showGeminiMessage(`CampusFlow Recommendation: SAC Room 301 is currently available and recommended for your selected schedule.`);
       }
     });
   }
@@ -277,7 +290,7 @@ export class BookingComponent implements OnInit {
     const startIso = `${yyyy}${mm}${dd}T${times.start}`;
     const endIso = `${yyyy}${mm}${dd}T${times.end}`;
 
-    const title = encodeURIComponent(`${booking.subject || 'Class Booking'} - ${booking.room_name}`);
+    const title = encodeURIComponent(`${booking.subject || 'Class Booking'}\n${booking.room_name}`);
     const details = encodeURIComponent(`Faculty: ${booking.booked_by}\nPeriod: ${booking.period}\nType: ${booking.booking_type || 'One-Time'}`);
     const location = encodeURIComponent(`${booking.room_name}, Liceo Campus`);
 

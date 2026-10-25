@@ -76,6 +76,57 @@ $blue-link: #326284;
 
 .main { flex: 1; padding: 30px; overflow-y: auto; }
 
+.gemini-notice-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(23, 23, 23, 0.4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 2000;
+  padding-top: 60px;
+}
+
+.gemini-notice {
+  width: min(560px, calc(100vw - 40px));
+  background: rgba(13, 25, 18, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  padding: 18px 18px 20px;
+  color: white;
+}
+
+.gemini-notice-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 12px;
+}
+
+.gemini-notice-message {
+  margin: 0 0 18px;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.96);
+  white-space: pre-line;
+}
+
+.gemini-ok-btn {
+  display: block;
+  margin: 0 auto;
+  min-width: 120px;
+  border: none;
+  border-radius: 999px;
+  background: #9fe8b2;
+  color: #12331a;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 0 18px rgba(159, 232, 178, 0.35);
+}
+
 .booking-grid {
   width: 100%; border-spacing: 12px; border-collapse: separate;
   th { font-size: 0.75rem; font-weight: normal; color: #444; }
